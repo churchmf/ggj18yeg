@@ -1,6 +1,15 @@
+# Blacklist everything in the top-most directory by default:
 /*
-/*/
 
+# Whitelist some files/folders:
 !.gitignore
+!LICENSE
+!/Transmission/
+
+# Then blacklist everything inside the transmission folder by default:
+/Transmission/*
+
+# Whitelist some files/folders:
+!/Transmission/.gitignore
 !/Transmission/Assets/
 !/Transmission/ProjectSettings/

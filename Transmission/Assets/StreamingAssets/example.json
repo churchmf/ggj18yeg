@@ -1,0 +1,32 @@
+{
+  "key": [
+    "G",
+    "F",
+    "E",
+    "D",
+    "C",
+    "B",
+    "A",
+    "G",
+    "F",
+    "E",
+    "D"
+  ],
+  "notes": [
+    {
+      "time": 1.0,
+      "note": "C",
+      "duration": 3.0
+    },
+    {
+      "time": 2.0,
+      "note": "D",
+      "duration": 2.0
+    },
+    {
+      "time": 4.0,
+      "note": "E",
+      "duration": 1.5
+    }
+  ]
+}
