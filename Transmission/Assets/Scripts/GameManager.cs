@@ -14,6 +14,9 @@ public class GameManager : MonoBehaviour {
     public GameObject noteTriggerPrefab;
     public GameObject menuCanvas;
 
+    public MusicSheet loadedSheet;
+    public float levelTimer;
+
     public float topHeight = 4;
     public float noteDistance = 0.75f;
 
@@ -28,14 +31,22 @@ public class GameManager : MonoBehaviour {
                 menuCanvas.SetActive(true);
                 break;
             case GameState.InitSinglePlayer:
-                LoadSinglePlayer();
+                loadedSheet = LoadSinglePlayer();
+                levelTimer = 0;
+                state = GameState.SinglePlayer;
                 break;
             case GameState.SinglePlayer:
+                PlayingLevel(loadedSheet);
                 break;
         }
 	}
 
-    public void LoadSinglePlayer()
+    public void PlayingLevel(MusicSheet sheet)
+    {
+        levelTimer += Time.deltaTime;
+    }
+
+    public MusicSheet LoadSinglePlayer()
     {
         menuCanvas.SetActive(false);
 
@@ -50,7 +61,7 @@ public class GameManager : MonoBehaviour {
             noteGameObject.GetComponent<NoteTriggerController>().note = key.note;
         }
 
-        state = GameState.SinglePlayer;
+        return sheet;
     }
 
     public void StartSinglePlayer()

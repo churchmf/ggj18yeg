@@ -20,6 +20,7 @@ public class MusicSheet
 {
     public Key[] key;
     public Note[] notes;
+    public Dialogue[] dialogue;
 }
 
 [Serializable]
@@ -35,4 +36,12 @@ public class Key
 {
     public string note;
     public float frequency;
+}
+
+[Serializable]
+public class Dialogue
+{
+    public string text;
+    public float time;
+    public float duration;
 }

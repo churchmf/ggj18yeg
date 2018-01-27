@@ -65,5 +65,12 @@
       "note": "E",
       "duration": 1.5
     }
+  ],
+  "dialogue": [
+    {
+      "text": "I am a happy cloud",
+      "time": 5,
+      "duration": 10
+    }
   ]
 }
