@@ -1,27 +1,23 @@
 {
   "keys": [
     {
-      "note": "G",
+      "note": "G1",
       "frequency": 244
     },
     {
-      "note": "F",
+      "note": "F1",
       "frequency": 244
     },
     {
-      "note": "E",
+      "note": "E1",
       "frequency": 244
     },
     {
-      "note": "D",
+      "note": "D1",
       "frequency": 244
     },
     {
       "note": "C",
-      "frequency": 244
-    },
-    {
-      "note": "B",
       "frequency": 244
     },
     {
@@ -64,6 +60,11 @@
       "time": 4.0,
       "note": "E",
       "duration": 1.5
+    },
+    {
+      "time": 6.0,
+      "note": "G",
+      "duration": 5
     }
   ],
   "dialogue": [
