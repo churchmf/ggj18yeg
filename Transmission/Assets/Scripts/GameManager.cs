@@ -46,8 +46,8 @@ public class GameManager : MonoBehaviour {
         {
             Key key = sheet.key[i];
             var noteGameObject = GameObject.Instantiate(noteTriggerPrefab, new Vector3(0, topHeight - (noteDistance * i)), Quaternion.identity);
-            noteGameObject.GetComponent<PlayerAudioEmitter>().frequency = key.frequency;
-            noteGameObject.GetComponent<PlayerAudioEmitter>().note = key.note;
+            noteGameObject.GetComponent<NoteTriggerController>().frequency = key.frequency;
+            noteGameObject.GetComponent<NoteTriggerController>().note = key.note;
         }
 
         state = GameState.SinglePlayer;
