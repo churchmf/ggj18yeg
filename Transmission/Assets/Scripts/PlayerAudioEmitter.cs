@@ -6,10 +6,13 @@ public class PlayerAudioEmitter : MonoBehaviour
     public AudioClip clip;
     public string note;
 
+    private bool clipChanged;
+
     private AudioSource audioSource;
     void Start()
     {
         audioSource = GetComponent<AudioSource>();
+        clipChanged = false;
     }
 
     void OnTriggerEnter2D(Collider2D other)
@@ -19,14 +22,23 @@ public class PlayerAudioEmitter : MonoBehaviour
         {
             clip = noteTrigger.clip;
             note = noteTrigger.note;
+            clipChanged = true;
         }
     }
 
     void FixedUpdate()
     {
-        if(!audioSource.isPlaying && clip != null)
+        if(clipChanged && clip != null)
         {
-            audioSource.PlayOneShot(clip);
+            clipChanged = false;
+            if (audioSource.isPlaying)
+            {
+                audioSource.Stop();
+            }
+
+            audioSource.clip = clip;
+            audioSource.loop = true;
+            audioSource.Play();
         }
     }
 }

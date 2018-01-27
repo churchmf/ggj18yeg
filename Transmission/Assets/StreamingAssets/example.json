@@ -4,61 +4,60 @@
   "keys": [
     {
       "note": "C5",
-      "file": "P.13.C5.mp3"
+      "file": "P.13.C5"
     },
     {
       "note": "B",
-      "file": "P.12.B.mp3"
+      "file": "P.12.B"
     },
     {
       "note": "A#",
-      "file": "P.11.A#.mp3"
+      "file": "P.11.A#"
     },
     {
       "note": "A",
-      "file": "P.10.A.mp3"
+      "file": "P.10.A"
     },
     {
       "note": "G#",
-      "file": "P.9.G#.mp3"
+      "file": "P.9.G#"
     },
     {
       "note": "G",
-      "file": "P.8.G.mp3"
+      "file": "P.8.G"
     },
     {
       "note": "F#",
-      "file": "P.7.F#.mp3"
+      "file": "P.7.F#"
     },
     {
       "note": "F",
-      "file": "P.6.F.mp3"
+      "file": "P.6.F"
     },
     {
       "note": "E",
-      "file": "P.5.E.mp3"
+      "file": "P.5.E"
     },
     {
       "note": "D#",
-      "file": "P.4.D#.mp3"
+      "file": "P.4.D#"
     },
     {
       "note": "D",
-      "file": "P.3.D.mp3"
+      "file": "P.3.D"
     },
     {
       "note": "C#",
-      "file": "P.2.C#.mp3"
+      "file": "P.2.C#"
     },
     {
       "note": "C4",
-      "file": "P.1.C.mp3"
+      "file": "P.1.C"
     }
   ],
   "stages": [
     {
       "tracks": [
-          "a"
       ],
       "notes": [
         {

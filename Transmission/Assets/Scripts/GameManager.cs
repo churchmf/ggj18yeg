@@ -153,7 +153,7 @@ public class GameManager : MonoBehaviour {
         {
             Key key = sheet.keys[i];
             var noteGameObject = Instantiate(noteTriggerPrefab, new Vector3(0, keyStartHeight - (keyDistanceApart * i)), Quaternion.identity);
-            noteGameObject.GetComponent<NoteTriggerController>().clip = Resources.Load<AudioClip>(key.file);
+            noteGameObject.GetComponent<NoteTriggerController>().clip = Resources.Load<AudioClip>(Path.Combine("Audio", key.file));
             noteGameObject.GetComponent<NoteTriggerController>().note = key.note;
         }
 
