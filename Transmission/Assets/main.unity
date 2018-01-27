@@ -1199,15 +1199,11 @@ MonoBehaviour:
   timeLabel: {fileID: 462699461}
   noteTargetPrefab: {fileID: 1059700742899198, guid: a0cde7946e5155c418fcf4c41121f333,
     type: 2}
-  loadedSheet:
-    keys: []
-    notes: []
-    dialogue: []
-  levelTimer: 0
   keyStartHeight: 4
   keyDistanceApart: 0.75
   noteTargetXStartOffset: 5
-  noteTargetSpeed: -100
+  noteTargetSpeed: -500
+  noteTargetXScale: 1
 --- !u!4 &1563575634
 Transform:
   m_ObjectHideFlags: 0

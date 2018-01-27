@@ -47,7 +47,7 @@ public class GameManager : MonoBehaviour {
             case GameState.InitSinglePlayer:
                 loadedSheet = LoadSinglePlayer();
 
-                sortedLevelNotes = new Stack<Note>(loadedSheet.notes.OrderBy(n => n.time));
+                sortedLevelNotes = new Stack<Note>(loadedSheet.notes.OrderByDescending(n => n.time));
 
                 noteSpawnPositions = new Dictionary<string, float>();
                 foreach(GameObject keyObject in GameObject.FindGameObjectsWithTag("Key"))
