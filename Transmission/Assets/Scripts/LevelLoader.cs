@@ -38,7 +38,6 @@ public class Note
     public string note;
     public int measure;
     public float beat;
-    public float duration;
 }
 
 [Serializable]
@@ -52,7 +51,7 @@ public class Key
 public class Dialogue
 {
     public string text;
-    public int measure;
+    public float measure;
     public float beat;
     public float duration;
 }
@@ -61,5 +60,5 @@ public class TimedNote
 {
     public string note;
     public float time;
-    public float duration;
+    public float beat;
 }

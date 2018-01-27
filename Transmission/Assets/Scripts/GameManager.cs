@@ -1,4 +1,6 @@
-﻿using System.Collections.Generic;
+﻿using NUnit.Framework;
+using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using UnityEngine;
 using UnityEngine.UI;
@@ -66,6 +68,7 @@ public class GameManager : MonoBehaviour {
                 break;
             case GameState.InitStage:
                 InitStage(loadedLevel.stages[stageIndex], loadedLevel.beatsPerMinute, loadedLevel.beatsPerMeasure);
+                state = GameState.PlayingStage;
                 break;
             case GameState.PlayingStage:
                 PlayingStage(loadedLevel.stages[stageIndex]);
@@ -83,37 +86,37 @@ public class GameManager : MonoBehaviour {
         sortedStageNotes = GetTimedNotes(stage.notes, tempo, beatsPerMeasure);
         foreach (string track in stage.tracks)
         {
-            AudioClip audioClip = Resources.Load<AudioClip>(track);
+            AudioClip audioClip = Resources.Load<AudioClip>(Path.Combine("Audio", track));
+            audioSource.clip = audioClip;
             audioSource.loop = true;
-            audioSource.PlayOneShot(audioClip);
+            audioSource.Play();
         }
     }
 
     private Stack<TimedNote> GetTimedNotes(Note[] notes, int tempo, int beatsPerMeasure)
     {
-        float beatsPerSecond = tempo / 60f;
         float secondsPerBeat = 60f / tempo;
         float secondsPerMeasure = (beatsPerMeasure * secondsPerBeat);
 
-        var timedNotes = new Stack<TimedNote>();
+        var timedNotes = new List<TimedNote>();
 
-        var measureNotes = notes.GroupBy(n => n.measure);
-        foreach(IGrouping<int, Note> measure in measureNotes) 
+        var measureNotes = notes.GroupBy(n => n.measure).OrderByDescending(m => m.Key);
+        foreach(IGrouping<int, Note> measure in measureNotes)
         {
             float secondsIntoMeasure = 0;
             foreach (Note note in measure)
             {
-                secondsIntoMeasure += (note.beat * (tempo / 60));
-                timedNotes.Push(new TimedNote()
+                timedNotes.Add(new TimedNote()
                 {
                     note = note.note,
-                    duration = note.duration,
+                    beat = note.beat,
                     time = secondsIntoMeasure + (secondsPerMeasure * (note.measure - 1))
                 });
+                secondsIntoMeasure += (note.beat * secondsPerBeat);
             }
         }
-           
-        return timedNotes;
+
+        return new Stack<TimedNote>(timedNotes.OrderByDescending(t => t.time));
     }
 
     private void PlayingStage(Stage stage)
@@ -126,12 +129,14 @@ public class GameManager : MonoBehaviour {
             if (sortedStageNotes.Any() && sortedStageNotes.Peek().time <= levelTimer)
             {
                 TimedNote note = sortedStageNotes.Pop();
+                if(!string.IsNullOrEmpty(note.note))
+                {
+                    float spawnY = noteSpawnPositions[note.note];
 
-                float spawnY = noteSpawnPositions[note.note];
-
-                var noteTarget = Instantiate(noteTargetPrefab, new Vector3(noteTargetXStartOffset, spawnY), Quaternion.identity);
-                noteTarget.transform.localScale = new Vector3(noteTargetXScale * note.duration, 1, 0);
-                noteTarget.GetComponent<Rigidbody2D>().AddForce(new Vector2(noteTargetSpeed, 0));
+                    var noteTarget = Instantiate(noteTargetPrefab, new Vector3(noteTargetXStartOffset, spawnY), Quaternion.identity);
+                    noteTarget.transform.localScale = new Vector3(noteTargetXScale * note.beat, 1, 0);
+                    noteTarget.GetComponent<Rigidbody2D>().AddForce(new Vector2(noteTargetSpeed, 0));
+                }
             }
         }
     }

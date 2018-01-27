@@ -58,45 +58,49 @@
   "stages": [
     {
       "tracks": [
-          "a.wav"
+          "a"
       ],
       "notes": [
         {
-          "mesure": 1,
+          "measure": 1,
           "beat": 0.5,
-          "duration": 1,
           "note": "C4"
         },
         {
-          "mesure": 1,
+          "measure": 1,
           "beat": 0.5,
-          "duration": 1,
           "note": "D"
         },
         {
-          "mesure": 1,
+          "measure": 1,
           "beat": 1,
-          "duration": 1,
           "note": ""
         },
         {
-          "mesure": 1,
+          "measure": 1,
           "beat": 1,
-          "duration": 2,
           "note": "E"
         },
         {
-          "mesure": 1,
+          "measure": 1,
           "beat": 1,
-          "duration": 2,
           "note": "G"
+        },
+        {
+          "measure": 2,
+          "beat": 1,
+          "note": "E"
+        },
+        {
+          "measure": 2,
+          "beat": 1,
+          "note": "E"
         }
       ],
       "dialogue": [
         {
-          "mesure": 5,
-          "beat": 0.25,
-          "duration": 1,
+          "measure": 5,
+          "beat": 1,
           "text": "I am a happy cloud"
         }
       ]
