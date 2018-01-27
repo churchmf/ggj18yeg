@@ -22,6 +22,7 @@ public class GameManager : MonoBehaviour {
     public GameObject uiMenu;
     public GameObject timeLabel;
     public GameObject noteTargetPrefab;
+    public Text levelName;
 
     private MusicSheet loadedLevel;
     private Stack<TimedNote> sortedStageNotes;
@@ -52,7 +53,7 @@ public class GameManager : MonoBehaviour {
                 uiHud.SetActive(false);
                 break;
             case GameState.InitLevel:
-                loadedLevel = LoadLevel();
+                loadedLevel = LoadLevel(levelName.text);
 
                 // spawn key triggers
                 noteSpawnPositions = new Dictionary<string, float>();
@@ -141,14 +142,14 @@ public class GameManager : MonoBehaviour {
         }
     }
 
-    private MusicSheet LoadLevel()
+    private MusicSheet LoadLevel(string name)
     {
         uiMenu.SetActive(false);
         uiHud.SetActive(true);
 
         Instantiate(playerPrefab);
 
-        MusicSheet sheet = LevelLoader.Load("example.json");
+        MusicSheet sheet = LevelLoader.Load(name);
         for(int i = 0; i < sheet.keys.Length; ++i)
         {
             Key key = sheet.keys[i];
