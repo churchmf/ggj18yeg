@@ -31,7 +31,7 @@ public class GameManager : MonoBehaviour {
     private int stageIndex;
 
     public float keyStartHeight = 4.5f;
-    public float keyDistanceApart = 0.5f;
+    public float keyDistanceApart = 0.75f;
 
     public float noteTargetXStartOffset = 5;
     public float noteTargetSpeed = -100;
@@ -135,7 +135,7 @@ public class GameManager : MonoBehaviour {
                     float spawnY = noteSpawnPositions[note.note];
 
                     var noteTarget = Instantiate(noteTargetPrefab, new Vector3(noteTargetXStartOffset, spawnY), Quaternion.identity);
-                    noteTarget.transform.localScale = new Vector3(noteTargetXScale * note.beat, 1, 0);
+                    noteTarget.transform.localScale += new Vector3(noteTargetXScale * note.beat, 0);
                     noteTarget.GetComponent<Rigidbody2D>().AddForce(new Vector2(noteTargetSpeed, 0));
                 }
             }

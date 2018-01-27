@@ -1423,7 +1423,7 @@ MonoBehaviour:
     type: 2}
   levelName: {fileID: 1841476870}
   keyStartHeight: 4.5
-  keyDistanceApart: 0.5
+  keyDistanceApart: 0.75
   noteTargetXStartOffset: 5
   noteTargetSpeed: -500
   noteTargetXScale: 1
