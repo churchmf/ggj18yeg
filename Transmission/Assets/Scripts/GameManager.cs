@@ -1,4 +1,5 @@
 ﻿using UnityEngine;
+using UnityEngine.UI;
 
 public class GameManager : MonoBehaviour {
 
@@ -12,7 +13,9 @@ public class GameManager : MonoBehaviour {
     public GameState state;
     public GameObject playerPrefab;
     public GameObject noteTriggerPrefab;
-    public GameObject menuCanvas;
+    public GameObject uiHud;
+    public GameObject uiMenu;
+    public GameObject timeLabel;
 
     public MusicSheet loadedSheet;
     public float levelTimer;
@@ -28,7 +31,7 @@ public class GameManager : MonoBehaviour {
 		switch(state)
         {
             case GameState.MainMenu:
-                menuCanvas.SetActive(true);
+                uiMenu.SetActive(true);
                 break;
             case GameState.InitSinglePlayer:
                 loadedSheet = LoadSinglePlayer();
@@ -44,11 +47,13 @@ public class GameManager : MonoBehaviour {
     public void PlayingLevel(MusicSheet sheet)
     {
         levelTimer += Time.deltaTime;
+        timeLabel.GetComponent<Text>().text = levelTimer.ToString();
     }
 
     public MusicSheet LoadSinglePlayer()
     {
-        menuCanvas.SetActive(false);
+        uiMenu.SetActive(false);
+        uiHud.SetActive(true);
 
         GameObject.Instantiate(playerPrefab);
 
