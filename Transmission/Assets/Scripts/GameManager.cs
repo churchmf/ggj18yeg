@@ -1,5 +1,4 @@
-﻿using NUnit.Framework;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using UnityEngine;
@@ -28,11 +27,11 @@ public class GameManager : MonoBehaviour {
     private Stack<TimedNote> sortedStageNotes;
     private Dictionary<string, float> noteSpawnPositions;
 
-    private float levelTimer;
+    private float timer;
     private int stageIndex;
 
-    public float keyStartHeight = 4;
-    public float keyDistanceApart = 0.75f;
+    public float keyStartHeight = 4.5f;
+    public float keyDistanceApart = 0.5f;
 
     public float noteTargetXStartOffset = 5;
     public float noteTargetSpeed = -100;
@@ -64,10 +63,10 @@ public class GameManager : MonoBehaviour {
                 }
 
                 stageIndex = 0;
-                levelTimer = 0;
                 state = GameState.InitStage;
                 break;
             case GameState.InitStage:
+                timer = 0;
                 InitStage(loadedLevel.stages[stageIndex], loadedLevel.beatsPerMinute, loadedLevel.beatsPerMeasure);
                 state = GameState.PlayingStage;
                 break;
@@ -120,14 +119,15 @@ public class GameManager : MonoBehaviour {
         return new Stack<TimedNote>(timedNotes.OrderByDescending(t => t.time));
     }
 
+    public bool completedStage = false;
     private void PlayingStage(Stage stage)
     {
-        levelTimer += Time.deltaTime;
-        timeLabel.GetComponent<Text>().text = levelTimer.ToString();
+        timer += Time.deltaTime;
+        timeLabel.GetComponent<Text>().text = timer.ToString();
 
         if (sortedStageNotes.Any())
         {
-            if (sortedStageNotes.Any() && sortedStageNotes.Peek().time <= levelTimer)
+            if (sortedStageNotes.Peek().time <= timer)
             {
                 TimedNote note = sortedStageNotes.Pop();
                 if(!string.IsNullOrEmpty(note.note))
@@ -139,6 +139,10 @@ public class GameManager : MonoBehaviour {
                     noteTarget.GetComponent<Rigidbody2D>().AddForce(new Vector2(noteTargetSpeed, 0));
                 }
             }
+        }
+        else if(!completedStage)
+        {
+            state = GameState.InitStage;
         }
     }
 
