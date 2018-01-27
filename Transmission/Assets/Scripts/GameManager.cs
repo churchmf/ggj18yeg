@@ -25,7 +25,7 @@ public class GameManager : MonoBehaviour {
     public float keyStartHeight = 4;
     public float keyDistanceApart = 0.75f;
 
-    public float noteTargetXStartOffset = 10;
+    public float noteTargetXStartOffset = 5;
     public float noteTargetSpeed = -10;
 
     void Start () {
