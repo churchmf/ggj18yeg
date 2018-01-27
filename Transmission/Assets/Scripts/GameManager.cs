@@ -8,8 +8,9 @@ public class GameManager : MonoBehaviour {
     public enum GameState
     {
         MainMenu,
-        InitSinglePlayer,
-        SinglePlayer
+        InitLevel,
+        InitStage,
+        PlayingStage
     };
 
     public GameState state;
@@ -20,11 +21,12 @@ public class GameManager : MonoBehaviour {
     public GameObject timeLabel;
     public GameObject noteTargetPrefab;
 
-    private MusicSheet loadedSheet;
-    private Stack<Note> sortedLevelNotes;
+    private MusicSheet loadedLevel;
+    private Stack<TimedNote> sortedStageNotes;
     private Dictionary<string, float> noteSpawnPositions;
 
     private float levelTimer;
+    private int stageIndex;
 
     public float keyStartHeight = 4;
     public float keyDistanceApart = 0.75f;
@@ -33,54 +35,97 @@ public class GameManager : MonoBehaviour {
     public float noteTargetSpeed = -100;
     public float noteTargetXScale = 1;
 
-    void Start () {
+    private AudioSource audioSource;
+    void Start ()
+    {
         state = GameState.MainMenu;
+        audioSource = GetComponent<AudioSource>();
     }
-	
-	void Update () {
+
+    void Update () {
 		switch(state)
         {
             case GameState.MainMenu:
                 uiMenu.SetActive(true);
                 uiHud.SetActive(false);
                 break;
-            case GameState.InitSinglePlayer:
-                loadedSheet = LoadSinglePlayer();
+            case GameState.InitLevel:
+                loadedLevel = LoadLevel();
 
-                sortedLevelNotes = new Stack<Note>(loadedSheet.notes.OrderByDescending(n => n.time));
-
+                // spawn key triggers
                 noteSpawnPositions = new Dictionary<string, float>();
-                foreach(GameObject keyObject in GameObject.FindGameObjectsWithTag("Key"))
+                foreach (GameObject keyObject in GameObject.FindGameObjectsWithTag("Key"))
                 {
                     var component = keyObject.GetComponent<NoteTriggerController>();
                     noteSpawnPositions.Add(component.note, keyObject.transform.position.y);
                 }
 
+                stageIndex = 0;
                 levelTimer = 0;
-                state = GameState.SinglePlayer;
+                state = GameState.InitStage;
                 break;
-            case GameState.SinglePlayer:
-                PlayingLevel(loadedSheet);
+            case GameState.InitStage:
+                InitStage(loadedLevel.stages[stageIndex], loadedLevel.beatsPerMinute, loadedLevel.beatsPerMeasure);
+                break;
+            case GameState.PlayingStage:
+                PlayingStage(loadedLevel.stages[stageIndex]);
                 break;
         }
 	}
 
-    public void StartSinglePlayer()
+    public void StartLevel()
     {
-        state = GameState.InitSinglePlayer;
+        state = GameState.InitLevel;
     }
 
-    private void PlayingLevel(MusicSheet sheet)
+    private void InitStage(Stage stage, int tempo, int beatsPerMeasure)
+    {
+        sortedStageNotes = GetTimedNotes(stage.notes, tempo, beatsPerMeasure);
+        foreach (string track in stage.tracks)
+        {
+            AudioClip audioClip = Resources.Load<AudioClip>(track);
+            audioSource.loop = true;
+            audioSource.PlayOneShot(audioClip);
+        }
+    }
+
+    private Stack<TimedNote> GetTimedNotes(Note[] notes, int tempo, int beatsPerMeasure)
+    {
+        float beatsPerSecond = tempo / 60f;
+        float secondsPerBeat = 60f / tempo;
+        float secondsPerMeasure = (beatsPerMeasure * secondsPerBeat);
+
+        var timedNotes = new Stack<TimedNote>();
+
+        var measureNotes = notes.GroupBy(n => n.measure);
+        foreach(IGrouping<int, Note> measure in measureNotes) 
+        {
+            float secondsIntoMeasure = 0;
+            foreach (Note note in measure)
+            {
+                secondsIntoMeasure += (note.beat * (tempo / 60));
+                timedNotes.Push(new TimedNote()
+                {
+                    note = note.note,
+                    duration = note.duration,
+                    time = secondsIntoMeasure + (secondsPerMeasure * (note.measure - 1))
+                });
+            }
+        }
+           
+        return timedNotes;
+    }
+
+    private void PlayingStage(Stage stage)
     {
         levelTimer += Time.deltaTime;
-
         timeLabel.GetComponent<Text>().text = levelTimer.ToString();
 
-        // generate notes for current time
-        if(sortedLevelNotes.Any()) {
-            if(sortedLevelNotes.Peek().time <= levelTimer)
+        if (sortedStageNotes.Any())
+        {
+            if (sortedStageNotes.Any() && sortedStageNotes.Peek().time <= levelTimer)
             {
-                Note note = sortedLevelNotes.Pop();
+                TimedNote note = sortedStageNotes.Pop();
 
                 float spawnY = noteSpawnPositions[note.note];
 
@@ -91,7 +136,7 @@ public class GameManager : MonoBehaviour {
         }
     }
 
-    private MusicSheet LoadSinglePlayer()
+    private MusicSheet LoadLevel()
     {
         uiMenu.SetActive(false);
         uiHud.SetActive(true);
@@ -103,7 +148,7 @@ public class GameManager : MonoBehaviour {
         {
             Key key = sheet.keys[i];
             var noteGameObject = Instantiate(noteTriggerPrefab, new Vector3(0, keyStartHeight - (keyDistanceApart * i)), Quaternion.identity);
-            noteGameObject.GetComponent<NoteTriggerController>().frequency = key.frequency;
+            noteGameObject.GetComponent<NoteTriggerController>().clip = Resources.Load<AudioClip>(key.file);
             noteGameObject.GetComponent<NoteTriggerController>().note = key.note;
         }
 

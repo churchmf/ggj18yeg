@@ -19,6 +19,15 @@ public static class LevelLoader
 public class MusicSheet
 {
     public Key[] keys;
+    public Stage[] stages;
+    public int beatsPerMinute;
+    public int beatsPerMeasure;
+}
+
+[Serializable]
+public class Stage
+{
+    public string[] tracks;
     public Note[] notes;
     public Dialogue[] dialogue;
 }
@@ -27,7 +36,8 @@ public class MusicSheet
 public class Note
 {
     public string note;
-    public float time;
+    public int measure;
+    public float beat;
     public float duration;
 }
 
@@ -35,13 +45,21 @@ public class Note
 public class Key
 {
     public string note;
-    public float frequency;
+    public string file;
 }
 
 [Serializable]
 public class Dialogue
 {
     public string text;
+    public int measure;
+    public float beat;
+    public float duration;
+}
+
+public class TimedNote
+{
+    public string note;
     public float time;
     public float duration;
 }

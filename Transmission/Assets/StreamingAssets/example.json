@@ -1,77 +1,105 @@
 {
+  "beatsPerMinute": 120,
+  "beatsPerMeasure": 4,
   "keys": [
     {
-      "note": "G1",
-      "frequency": 244
-    },
-    {
-      "note": "F1",
-      "frequency": 244
-    },
-    {
-      "note": "E1",
-      "frequency": 244
-    },
-    {
-      "note": "D1",
-      "frequency": 244
-    },
-    {
-      "note": "C",
-      "frequency": 244
+      "note": "C5",
+      "file": "P.13.C5.mp3"
     },
     {
       "note": "B",
-      "frequency": 244
+      "file": "P.12.B.mp3"
+    },
+    {
+      "note": "A#",
+      "file": "P.11.A#.mp3"
     },
     {
       "note": "A",
-      "frequency": 244
+      "file": "P.10.A.mp3"
+    },
+    {
+      "note": "G#",
+      "file": "P.9.G#.mp3"
     },
     {
       "note": "G",
-      "frequency": 244
+      "file": "P.8.G.mp3"
+    },
+    {
+      "note": "F#",
+      "file": "P.7.F#.mp3"
     },
     {
       "note": "F",
-      "frequency": 244
+      "file": "P.6.F.mp3"
     },
     {
       "note": "E",
-      "frequency": 244
+      "file": "P.5.E.mp3"
+    },
+    {
+      "note": "D#",
+      "file": "P.4.D#.mp3"
     },
     {
       "note": "D",
-      "frequency": 244
+      "file": "P.3.D.mp3"
+    },
+    {
+      "note": "C#",
+      "file": "P.2.C#.mp3"
+    },
+    {
+      "note": "C4",
+      "file": "P.1.C.mp3"
     }
   ],
-  "notes": [
+  "stages": [
     {
-      "time": 1.0,
-      "note": "C",
-      "duration": 3.0
-    },
-    {
-      "time": 2.0,
-      "note": "D",
-      "duration": 2.0
-    },
-    {
-      "time": 4.0,
-      "note": "E",
-      "duration": 1.5
-    },
-    {
-      "time": 6.0,
-      "note": "G",
-      "duration": 5
-    }
-  ],
-  "dialogue": [
-    {
-      "text": "I am a happy cloud",
-      "time": 5,
-      "duration": 10
+      "tracks": [
+          "a.wav"
+      ],
+      "notes": [
+        {
+          "mesure": 1,
+          "beat": 0.5,
+          "duration": 1,
+          "note": "C4"
+        },
+        {
+          "mesure": 1,
+          "beat": 0.5,
+          "duration": 1,
+          "note": "D"
+        },
+        {
+          "mesure": 1,
+          "beat": 1,
+          "duration": 1,
+          "note": ""
+        },
+        {
+          "mesure": 1,
+          "beat": 1,
+          "duration": 2,
+          "note": "E"
+        },
+        {
+          "mesure": 1,
+          "beat": 1,
+          "duration": 2,
+          "note": "G"
+        }
+      ],
+      "dialogue": [
+        {
+          "mesure": 5,
+          "beat": 0.25,
+          "duration": 1,
+          "text": "I am a happy cloud"
+        }
+      ]
     }
   ]
 }

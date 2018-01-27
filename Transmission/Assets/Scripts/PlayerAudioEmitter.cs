@@ -3,9 +3,7 @@ using UnityEngine;
 
 public class PlayerAudioEmitter : MonoBehaviour
 {
-    public int position = 0;
-    public int samplerate = 44100;
-    public float frequency;
+    public AudioClip clip;
     public string note;
 
     private AudioSource audioSource;
@@ -19,33 +17,16 @@ public class PlayerAudioEmitter : MonoBehaviour
         var noteTrigger = other.GetComponent<NoteTriggerController>();
         if(noteTrigger != null)
         {
-            frequency = noteTrigger.frequency;
+            clip = noteTrigger.clip;
             note = noteTrigger.note;
         }
     }
 
     void FixedUpdate()
     {
-        if(!audioSource.isPlaying && !string.IsNullOrEmpty(note))
+        if(!audioSource.isPlaying && clip != null)
         {
-            audioSource.clip = AudioClip.Create("audioClip", samplerate, 1, samplerate, true, OnAudioRead, OnAudioSetPosition);
-            audioSource.Play();
+            audioSource.PlayOneShot(clip);
         }
-    }
-
-    void OnAudioRead(float[] data)
-    {
-        int count = 0;
-        while (count < data.Length)
-        {
-            data[count] = Mathf.Sign(Mathf.Sin(2 * Mathf.PI * frequency * position / samplerate));
-            position++;
-            count++;
-        }
-    }
-
-    void OnAudioSetPosition(int newPosition)
-    {
-        position = newPosition;
     }
 }
