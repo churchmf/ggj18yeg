@@ -21,7 +21,7 @@ GameObject:
   - component: {fileID: 4923094706476876}
   - component: {fileID: 212277252544732400}
   - component: {fileID: 61344328161394968}
-  - component: {fileID: 114617019414886886}
+  - component: {fileID: 114088861799802462}
   - component: {fileID: 82151059438254608}
   m_Layer: 0
   m_Name: NoteTrigger
@@ -135,7 +135,7 @@ AudioSource:
       tangentMode: 0
     m_PreInfinity: 2
     m_PostInfinity: 2
-    m_RotationOrder: 4
+    m_RotationOrder: 0
   reverbZoneMixCustomCurve:
     serializedVersion: 2
     m_Curve:
@@ -148,7 +148,7 @@ AudioSource:
     m_PreInfinity: 2
     m_PostInfinity: 2
     m_RotationOrder: 0
---- !u!114 &114617019414886886
+--- !u!114 &114088861799802462
 MonoBehaviour:
   m_ObjectHideFlags: 1
   m_PrefabParentObject: {fileID: 0}
@@ -156,11 +156,12 @@ MonoBehaviour:
   m_GameObject: {fileID: 1756428213670042}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 4e8c496d37ec3f9499ea2af0d6983ba3, type: 3}
+  m_Script: {fileID: 11500000, guid: 9989bb282ce94e649a94badf2e5705eb, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  note: A
-  audioNote: {fileID: 8300000, guid: a1d7912299d7bf446be94df1932cbc6f, type: 3}
+  position: 0
+  samplerate: 44100
+  frequency: 440
 --- !u!212 &212277252544732400
 SpriteRenderer:
   m_ObjectHideFlags: 1

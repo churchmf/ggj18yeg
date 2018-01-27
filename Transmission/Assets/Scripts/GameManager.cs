@@ -44,9 +44,10 @@ public class GameManager : MonoBehaviour {
         MusicSheet sheet = LevelLoader.Load("example.json");
         for(int i = 0; i < sheet.key.Length; ++i)
         {
-            // TODO pipe note to GameObject, use that to select the right audio tone
-            string note = sheet.key[i];
-            GameObject.Instantiate(noteTriggerPrefab, new Vector3(0, topHeight - (noteDistance * i)), Quaternion.identity);
+            Key key = sheet.key[i];
+            var noteGameObject = GameObject.Instantiate(noteTriggerPrefab, new Vector3(0, topHeight - (noteDistance * i)), Quaternion.identity);
+            noteGameObject.GetComponent<PlayerAudioEmitter>().frequency = key.frequency;
+            noteGameObject.GetComponent<PlayerAudioEmitter>().note = key.note;
         }
 
         state = GameState.SinglePlayer;

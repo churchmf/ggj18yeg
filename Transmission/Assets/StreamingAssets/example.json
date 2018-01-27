@@ -1,16 +1,53 @@
 {
   "key": [
-    "G",
-    "F",
-    "E",
-    "D",
-    "C",
-    "B",
-    "A",
-    "G",
-    "F",
-    "E",
-    "D"
+    {
+      "note": "G",
+      "frequency": 244
+    },
+    {
+      "note": "F",
+      "frequency": 244
+    },
+    {
+      "note": "E",
+      "frequency": 244
+    },
+    {
+      "note": "D",
+      "frequency": 244
+    },
+    {
+      "note": "C",
+      "frequency": 244
+    },
+    {
+      "note": "B",
+      "frequency": 244
+    },
+    {
+      "note": "B",
+      "frequency": 244
+    },
+    {
+      "note": "A",
+      "frequency": 244
+    },
+    {
+      "note": "G",
+      "frequency": 244
+    },
+    {
+      "note": "F",
+      "frequency": 244
+    },
+    {
+      "note": "E",
+      "frequency": 244
+    },
+    {
+      "note": "D",
+      "frequency": 244
+    }
   ],
   "notes": [
     {

@@ -18,7 +18,7 @@ public static class LevelLoader
 [Serializable]
 public class MusicSheet
 {
-    public string[] key;
+    public Key[] key;
     public Note[] notes;
 }
 
@@ -28,4 +28,11 @@ public class Note
     public string note;
     public float time;
     public float duration;
+}
+
+[Serializable]
+public class Key
+{
+    public string note;
+    public float frequency;
 }
