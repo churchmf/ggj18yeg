@@ -12,7 +12,9 @@ public class GameManager : MonoBehaviour {
         MainMenu,
         InitLevel,
         InitStage,
-        PlayingStage
+        PlayingStage,
+        PassStage,
+        PassLevel
     };
 
     public GameState state;
@@ -51,6 +53,7 @@ public class GameManager : MonoBehaviour {
     }
 
     void Update () {
+        timer += Time.deltaTime;
         if (Input.GetKey(KeyCode.Escape))
         {
             CleanUpLevel();
@@ -69,12 +72,37 @@ public class GameManager : MonoBehaviour {
                 state = GameState.InitStage;
                 break;
             case GameState.InitStage:
-                timer = 0;
+                if (spawnedNotes != null && spawnedNotes.Any())
+                {
+                    foreach(var spawn in spawnedNotes)
+                    {
+                        Destroy(spawn);
+                    }
+                }
+                spawnedNotes = new List<GameObject>();
+
                 InitStage(loadedLevel.stages[stageIndex], loadedLevel.beatsPerMinute, loadedLevel.beatsPerMeasure);
+                timer = 0;
                 state = GameState.PlayingStage;
                 break;
             case GameState.PlayingStage:
                 PlayingStage(loadedLevel.stages[stageIndex]);
+                break;
+            case GameState.PassStage:
+                stageIndex++;
+                if(loadedLevel.stages.Length < stageIndex)
+                {
+                    state = GameState.InitStage;
+                }
+                else
+                {
+                    timer = 0;
+                    state = GameState.PassLevel;
+                }
+                break;
+            case GameState.PassLevel:
+                uiHud.SetActive(true);
+                uiMenu.SetActive(false);
                 break;
         }
 	}
@@ -159,7 +187,7 @@ public class GameManager : MonoBehaviour {
                 timedNotes.Add(new TimedNote()
                 {
                     note = note.note,
-                    beat = note.beat,
+                    duration = note.beat * secondsPerBeat,
                     time = secondsIntoMeasure + (secondsPerMeasure * (note.measure - 1))
                 });
                 secondsIntoMeasure += (note.beat * secondsPerBeat);
@@ -176,9 +204,9 @@ public class GameManager : MonoBehaviour {
     }
 
     private Coroutine deactivateDialogueCoroutine;
+    private List<GameObject> spawnedNotes;
     private void PlayingStage(Stage stage)
     {
-        timer += Time.deltaTime;
         timeLabel.GetComponent<Text>().text = timer.ToString();
 
         if(sortedStageDialogue.Any())
@@ -210,23 +238,31 @@ public class GameManager : MonoBehaviour {
                 if(!string.IsNullOrEmpty(note.note) && noteSpawnPositions.Any())
                 {
                     var noteTarget = Instantiate(noteTargetPrefab, new Vector3(noteTargetXStartOffset, noteSpawnPositions[note.note]), Quaternion.identity);
-                    noteTarget.transform.localScale += new Vector3(noteTargetXScale * note.beat, 0);
+                    noteTarget.transform.localScale += new Vector3(noteTargetXScale * note.duration, 0);
                     noteTarget.GetComponent<Rigidbody2D>().AddForce(new Vector2(noteTargetSpeed, 0));
+                    spawnedNotes.Add(noteTarget);
                 }
             }
         }
 
-        // TODO how do we want to end the stage? Need to add collision detection on notes, keep track and complete if all are hit
-        if (!sortedStageNotes.Any() && !sortedStageDialogue.Any())
+        // no more notes to spawn, check if we won, otherwise restart
+        if(!sortedStageNotes.Any() && spawnedNotes.All(s => s.transform.position.x < -10) && !sortedStageDialogue.Any())
         {
-            state = GameState.InitStage;
+            if (spawnedNotes.All(s => s.GetComponent<NoteTargetController>().hit))
+            {
+                state = GameState.PassStage;
+            }
+            else
+            {
+                state = GameState.InitStage;
+            }
         }
     }
 
     private void LoadLevel(string name)
     {
         uiMenu.SetActive(false);
-        uiHud.SetActive(true);
+        uiHud.SetActive(false);
 
         playerGameObject = Instantiate(playerPrefab);
 

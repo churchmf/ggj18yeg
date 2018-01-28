@@ -60,7 +60,7 @@ public class TimedNote
 {
     public string note;
     public float time;
-    public float beat;
+    public float duration;
 }
 
 public class TimedDialogue
