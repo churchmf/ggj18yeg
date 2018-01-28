@@ -32,12 +32,12 @@ public class GameManager : MonoBehaviour {
     private float timer;
     private int stageIndex;
 
-    public float keyStartHeight = 4.5f;
-    public float keyDistanceApart = 0.75f;
+    public float keyStartHeight;
+    public float keyDistanceApart;
 
-    public float noteTargetXStartOffset = 5;
-    public float noteTargetSpeed = -100;
-    public float noteTargetXScale = 1;
+    public float noteTargetXStartOffset;
+    public float noteTargetSpeed;
+    public float noteTargetXScale;
 
     private GameObject playerGameObject;
 
@@ -119,25 +119,27 @@ public class GameManager : MonoBehaviour {
 
         var timedNotes = new List<TimedDialogue>();
 
-        var measureDialogue = dialogues.GroupBy(d => d.measure).OrderByDescending(m => m.Key);
-        foreach (IGrouping<int, Dialogue> measure in measureDialogue)
+        if(dialogues != null && dialogues.Any())
         {
-            float secondsIntoMeasure = 0;
-            foreach (Dialogue dialogue in measure)
+            var measureDialogue = dialogues.GroupBy(d => d.measure).OrderByDescending(m => m.Key);
+            foreach (IGrouping<int, Dialogue> measure in measureDialogue)
             {
-                Color color;
-                ColorUtility.TryParseHtmlString(dialogue.color, out color);
-                timedNotes.Add(new TimedDialogue()
+                float secondsIntoMeasure = 0;
+                foreach (Dialogue dialogue in measure)
                 {
-                    text = dialogue.text,
-                    duration = dialogue.beat * secondsPerBeat,
-                    time = secondsIntoMeasure + (secondsPerMeasure * (dialogue.measure - 1)),
-                    color = color
-            });
-                secondsIntoMeasure += (dialogue.beat * secondsPerBeat);
+                    Color color;
+                    ColorUtility.TryParseHtmlString(dialogue.color, out color);
+                    timedNotes.Add(new TimedDialogue()
+                    {
+                        text = dialogue.text,
+                        duration = dialogue.beat * secondsPerBeat,
+                        time = secondsIntoMeasure + (secondsPerMeasure * (dialogue.measure - 1)),
+                        color = color
+                });
+                    secondsIntoMeasure += (dialogue.beat * secondsPerBeat);
+                }
             }
         }
-
         return new Stack<TimedDialogue>(timedNotes.OrderByDescending(t => t.time));
     }
 

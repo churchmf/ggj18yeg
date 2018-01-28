@@ -81,6 +81,20 @@
           "beat": 1,
           "note": "6b"
         }
+      ],
+      "dialogue": [
+        {
+          "measure": 1,
+          "beat": 4,
+          "text": "I am a happy cloud...",
+          "color": "#7142f4"
+        },
+        {
+          "measure": 3,
+          "beat": 6,
+          "text": "I am a sad cloud...",
+          "color": "#38e035"
+        }
       ]
     }
   ]
