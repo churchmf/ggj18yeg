@@ -49,6 +49,12 @@ public class GameManager : MonoBehaviour {
     {
         audioSourceTracks = new List<AudioSource>(GetComponents<AudioSource>());
         state = GameState.MainMenu;
+
+        int width = 1366; 
+        int height = 768;
+        bool isFullScreen = false; 
+        int desiredFPS = 60;
+        Screen.SetResolution(width, height, isFullScreen, desiredFPS);
     }
 
     void Update () {
