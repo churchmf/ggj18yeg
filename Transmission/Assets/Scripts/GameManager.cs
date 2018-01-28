@@ -37,6 +37,8 @@ public class GameManager : MonoBehaviour {
     public float noteTargetSpeed = -100;
     public float noteTargetXScale = 1;
 
+    public GameObject playerGameObject;
+
     private AudioSource audioSource;
     void Start ()
     {
@@ -45,7 +47,13 @@ public class GameManager : MonoBehaviour {
     }
 
     void Update () {
-		switch(state)
+        if (Input.GetKey(KeyCode.Escape))
+        {
+            CleanUpLevel();
+            state = GameState.MainMenu;
+        }
+
+        switch (state)
         {
             case GameState.MainMenu:
                 uiMenu.SetActive(true);
@@ -70,6 +78,21 @@ public class GameManager : MonoBehaviour {
     public void StartLevel()
     {
         state = GameState.InitLevel;
+    }
+
+    private void CleanUpLevel()
+    {
+        audioSource.Stop();
+
+        if (playerGameObject != null)
+        {
+            Destroy(playerGameObject);
+        }
+
+        foreach (var key in GameObject.FindGameObjectsWithTag("Key"))
+        {
+            Destroy(key);
+        }
     }
 
     private void InitStage(Stage stage, int tempo, int beatsPerMeasure)
@@ -123,10 +146,7 @@ public class GameManager : MonoBehaviour {
                 TimedNote note = sortedStageNotes.Pop();
                 if(!string.IsNullOrEmpty(note.note) && noteSpawnPositions.Any())
                 {
-
-                    float spawnY = noteSpawnPositions[note.note];
-
-                    var noteTarget = Instantiate(noteTargetPrefab, new Vector3(noteTargetXStartOffset, spawnY), Quaternion.identity);
+                    var noteTarget = Instantiate(noteTargetPrefab, new Vector3(noteTargetXStartOffset, noteSpawnPositions[note.note]), Quaternion.identity);
                     noteTarget.transform.localScale += new Vector3(noteTargetXScale * note.beat, 0);
                     noteTarget.GetComponent<Rigidbody2D>().AddForce(new Vector2(noteTargetSpeed, 0));
                 }
@@ -143,7 +163,7 @@ public class GameManager : MonoBehaviour {
         uiMenu.SetActive(false);
         uiHud.SetActive(true);
 
-        Instantiate(playerPrefab);
+        playerGameObject = Instantiate(playerPrefab);
 
         noteSpawnPositions = new Dictionary<string, float>();
 
