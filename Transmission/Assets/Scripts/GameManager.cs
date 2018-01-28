@@ -45,7 +45,8 @@ public class GameManager : MonoBehaviour {
     private GameObject playerGameObject;
 
     private List<string> levelList = new List<string>(new string[] {
-        "owe.json"
+        "owe.json",
+        "super.json"
     });
     private int levelIndex;
 
