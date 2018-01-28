@@ -44,12 +44,11 @@ public class GameManager : MonoBehaviour {
     private GameObject playerGameObject;
 
     public GameObject dialoguePanel;
-
-    private AudioSource audioSource;
+    public List<AudioSource> audioSources;
     void Start ()
     {
+        audioSources = new List<AudioSource>(GetComponents<AudioSource>());
         state = GameState.MainMenu;
-        audioSource = GetComponent<AudioSource>();
     }
 
     void Update () {
@@ -114,7 +113,7 @@ public class GameManager : MonoBehaviour {
 
     private void CleanUpLevel()
     {
-        audioSource.Stop();
+        audioSources.ForEach(a => a.Stop());
 
         if (playerGameObject != null)
         {
@@ -131,12 +130,24 @@ public class GameManager : MonoBehaviour {
     {
         sortedStageDialogue = GetTimedDialogue(stage.dialogue, tempo, beatsPerMeasure);
         sortedStageNotes = GetTimedNotes(stage.notes, tempo, beatsPerMeasure);
-        foreach (string track in stage.tracks)
+
+        // Stop all playing tracks
+        audioSources.ForEach(a => a.Stop());
+
+        // ensure we have an audio source for each track
+        while (audioSources.Count() < stage.tracks.Length)
         {
-            AudioClip audioClip = Resources.Load<AudioClip>(Path.Combine("Audio", track));
-            audioSource.clip = audioClip;
-            audioSource.loop = true;
-            audioSource.Play();
+            audioSources.Add(gameObject.AddComponent<AudioSource>());
+        }
+
+        // Start all new tracks
+        for(int i = 0; i < stage.tracks.Length; ++i)
+        {
+            string path = Path.Combine("Audio", stage.tracks[i]);
+            AudioClip audioClip = Resources.Load<AudioClip>(path);
+
+            audioSources[i].clip = audioClip;
+            audioSources[i].Play();
         }
     }
 
@@ -245,9 +256,10 @@ public class GameManager : MonoBehaviour {
             }
         }
 
-        // no more notes to spawn, check if we won, otherwise restart
-        if(!sortedStageNotes.Any() && spawnedNotes.All(s => s.transform.position.x < -10) && !sortedStageDialogue.Any())
+        // If all tracks are done playing, stage is over
+        if (audioSources.All(a => !a.isPlaying))
         {
+            // Check if we won, otherwise restart
             if (spawnedNotes.All(s => s.GetComponent<NoteTargetController>().hit))
             {
                 state = GameState.PassStage;
