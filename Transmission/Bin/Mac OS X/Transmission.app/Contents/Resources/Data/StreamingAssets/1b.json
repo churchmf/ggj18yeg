@@ -1,0 +1,73 @@
+{
+  "beatsPerMinute": 80,
+  "beatsPerMeasure": 5,
+  "keys": [
+    {
+      "note": "8",
+      "file": "A4"
+    },
+    {
+      "note": "7",
+      "file": "G#4"
+    },
+    {
+      "note": "7b",
+      "file": "G4"
+    },
+    {
+      "note": "6",
+      "file": "F#4"
+    },
+    {
+      "note": "6b",
+      "file": "F4"
+    },
+    {
+      "note": "5",
+      "file": "E4"
+    },
+    {
+      "note": "5b",
+      "file": "D#4"
+    },
+    {
+      "note": "4",
+      "file": "D4"
+    },
+    {
+      "note": "3",
+      "file": "C#4"
+    },
+    {
+      "note": "3b",
+      "file": "C4"
+    },
+    {
+      "note": "2",
+      "file": "B3"
+    },
+    {
+      "note": "2b",
+      "file": "A#3"
+    },
+    {
+      "note": "1",
+      "file": "A3"
+    }
+  ],
+  "stages": [
+    {
+      "tracks": [
+        "loop1b"
+      ],
+      "dialogue": [
+        {
+          "measure": 1,
+          "beat": 2,
+          "duration": 1,
+          "text": "I am a happy cloud"
+        }
+      ]
+    }
+  ]
+}
