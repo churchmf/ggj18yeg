@@ -80,11 +80,20 @@
           "measure": 7,
           "beat": 1,
           "note": "6b"
+        }
+      ],
+      "dialogue": [
+        {
+          "measure": 1,
+          "beat": 8,
+          "text": "I am a happy cloud...",
+          "color": "#7142f4"
         },
         {
-    	  "measure": 9,
-          "beat": 1,
-          "note": ""
+          "measure": 3,
+          "beat": 9,
+          "text": "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua",
+          "color": "#38e035"
         }
       ]
     }
