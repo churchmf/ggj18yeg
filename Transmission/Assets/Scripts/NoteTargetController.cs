@@ -8,7 +8,14 @@ public class NoteTargetController : MonoBehaviour {
         if(other.gameObject.tag.Equals("Player"))
         {
             hit = true;
-            gameObject.GetComponent<SpriteRenderer>().color = Color.green;
+        }
+    }
+
+    void Update()
+    {
+        if(hit)
+        {
+            gameObject.transform.localScale /= 2;
         }
     }
 }
