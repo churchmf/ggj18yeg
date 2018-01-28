@@ -1,0 +1,73 @@
+{
+  "beatsPerMinute": 71,
+  "beatsPerMeasure": 4,
+  "keys": [
+    {
+      "note": "8",
+      "file": "d4"
+    },
+    {
+      "note": "7",
+      "file": "C#4"
+    },
+    {
+      "note": "7b",
+      "file": "C4"
+    },
+    {
+      "note": "6",
+      "file": "B3"
+    },
+    {
+      "note": "6b",
+      "file": "A#3"
+    },
+    {
+      "note": "5",
+      "file": "A3"
+    },
+    {
+      "note": "5b",
+      "file": "G#3"
+    },
+    {
+      "note": "4",
+      "file": "G3"
+    },
+    {
+      "note": "3",
+      "file": "F#3"
+    },
+    {
+      "note": "3b",
+      "file": "F3"
+    },
+    {
+      "note": "2",
+      "file": "E3"
+    },
+    {
+      "note": "2b",
+      "file": "D#3"
+    },
+    {
+      "note": "1",
+      "file": "D3"
+    }
+  ],
+  "stages": [
+    {
+      "tracks": [
+        "owe1b"
+      ],
+      "dialogue": [
+        {
+          "measure": 2,
+          "beat": 4,
+          "text": "You get lost in it.",
+		      "color": "#ffb93f"
+        }
+      ]
+    }
+  ]
+}
