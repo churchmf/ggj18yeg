@@ -52,16 +52,7 @@ public class GameManager : MonoBehaviour {
                 uiHud.SetActive(false);
                 break;
             case GameState.InitLevel:
-                loadedLevel = LoadLevel(levelName.text);
-
-                // spawn key triggers
-                noteSpawnPositions = new Dictionary<string, float>();
-                foreach (GameObject keyObject in GameObject.FindGameObjectsWithTag("Key"))
-                {
-                    var component = keyObject.GetComponent<NoteTriggerController>();
-                    noteSpawnPositions.Add(component.note, keyObject.transform.position.y);
-                }
-
+                LoadLevel(levelName.text);
                 stageIndex = 0;
                 state = GameState.InitStage;
                 break;
@@ -130,8 +121,9 @@ public class GameManager : MonoBehaviour {
             if (sortedStageNotes.Peek().time <= timer)
             {
                 TimedNote note = sortedStageNotes.Pop();
-                if(!string.IsNullOrEmpty(note.note))
+                if(!string.IsNullOrEmpty(note.note) && noteSpawnPositions.Any())
                 {
+
                     float spawnY = noteSpawnPositions[note.note];
 
                     var noteTarget = Instantiate(noteTargetPrefab, new Vector3(noteTargetXStartOffset, spawnY), Quaternion.identity);
@@ -146,22 +138,27 @@ public class GameManager : MonoBehaviour {
         }
     }
 
-    private MusicSheet LoadLevel(string name)
+    private void LoadLevel(string name)
     {
         uiMenu.SetActive(false);
         uiHud.SetActive(true);
 
         Instantiate(playerPrefab);
 
+        noteSpawnPositions = new Dictionary<string, float>();
+
         MusicSheet sheet = LevelLoader.Load(name);
         for(int i = 0; i < sheet.keys.Length; ++i)
         {
             Key key = sheet.keys[i];
-            var noteGameObject = Instantiate(noteTriggerPrefab, new Vector3(0, keyStartHeight - (keyDistanceApart * i)), Quaternion.identity);
+            var y = keyStartHeight - (keyDistanceApart * i);
+            var noteGameObject = Instantiate(noteTriggerPrefab, new Vector3(0, y), Quaternion.identity);
             noteGameObject.GetComponent<NoteTriggerController>().clip = Resources.Load<AudioClip>(Path.Combine("Audio", key.file));
             noteGameObject.GetComponent<NoteTriggerController>().note = key.note;
+
+            noteSpawnPositions.Add(key.note, y);
         }
 
-        return sheet;
+        loadedLevel = sheet;
     }
 }
