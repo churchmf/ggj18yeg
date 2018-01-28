@@ -64,14 +64,14 @@
         {
           "measure": 2,
           "beat": 4,
-          "text": "You feel the pulse."
-		  "color": "#ffb93f"
+          "text": "You feel the pulse.",
+          "color": "#ffb93f"
         },
 		{
           "measure": 4,
           "beat": 4,
-          "text": "It resonates through you."
-		  "color": "#ffb93f"
+          "text": "It resonates through you.",
+          "color": "#ffb93f"
         }
       ]
     }

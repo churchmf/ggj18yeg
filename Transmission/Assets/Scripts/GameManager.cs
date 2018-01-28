@@ -45,8 +45,7 @@ public class GameManager : MonoBehaviour {
     private GameObject playerGameObject;
 
     private List<string> levelList = new List<string>(new string[] {
-        "owe.json",
-        "super.json"
+        "owe.json"
     });
     private int levelIndex;
 
@@ -122,6 +121,7 @@ public class GameManager : MonoBehaviour {
                 }
                 else
                 {
+                    CleanUpLevel();
                     state = GameState.MainMenu;
                     uiHud.SetActive(true);
                 }
@@ -342,6 +342,7 @@ public class GameManager : MonoBehaviour {
         } catch (Exception e)
         {
             Console.WriteLine(e);
+            CleanUpLevel();
             state = GameState.MainMenu;
         }
 

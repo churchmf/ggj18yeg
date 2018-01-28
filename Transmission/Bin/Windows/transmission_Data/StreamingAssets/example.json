@@ -85,14 +85,14 @@
       "dialogue": [
         {
           "measure": 1,
-          "beat": 4,
+          "beat": 8,
           "text": "I am a happy cloud...",
           "color": "#7142f4"
         },
         {
           "measure": 3,
-          "beat": 6,
-          "text": "I am a sad cloud...",
+          "beat": 9,
+          "text": "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua",
           "color": "#38e035"
         }
       ]
