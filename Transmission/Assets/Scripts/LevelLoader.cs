@@ -51,9 +51,9 @@ public class Key
 public class Dialogue
 {
     public string text;
-    public float measure;
+    public int measure;
     public float beat;
-    public float duration;
+    public string color;
 }
 
 public class TimedNote
@@ -67,5 +67,6 @@ public class TimedDialogue
 {
     public string text;
     public float time;
-    public float beat;
+    public float duration;
+    public Color color;
 }

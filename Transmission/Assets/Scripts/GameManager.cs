@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System.Collections;
+using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using UnityEngine;
@@ -111,26 +112,29 @@ public class GameManager : MonoBehaviour {
         }
     }
 
-    private Stack<TimedDialogue> GetTimedDialogue(Dialogue[] dialogue, int tempo, int beatsPerMeasure)
+    private Stack<TimedDialogue> GetTimedDialogue(Dialogue[] dialogues, int tempo, int beatsPerMeasure)
     {
         float secondsPerBeat = 60f / tempo;
         float secondsPerMeasure = (beatsPerMeasure * secondsPerBeat);
 
         var timedNotes = new List<TimedDialogue>();
 
-        var measureNotes = dialogue.GroupBy(n => n.measure).OrderByDescending(m => m.Key);
-        foreach (IGrouping<int, Dialogue> measure in measureNotes)
+        var measureDialogue = dialogues.GroupBy(d => d.measure).OrderByDescending(m => m.Key);
+        foreach (IGrouping<int, Dialogue> measure in measureDialogue)
         {
             float secondsIntoMeasure = 0;
-            foreach (Dialogue note in measure)
+            foreach (Dialogue dialogue in measure)
             {
+                Color color;
+                ColorUtility.TryParseHtmlString(dialogue.color, out color);
                 timedNotes.Add(new TimedDialogue()
                 {
-                    text = note.text,
-                    beat = note.beat,
-                    time = secondsIntoMeasure + (secondsPerMeasure * (note.measure - 1))
-                });
-                secondsIntoMeasure += (note.beat * secondsPerBeat);
+                    text = dialogue.text,
+                    duration = dialogue.beat * secondsPerBeat,
+                    time = secondsIntoMeasure + (secondsPerMeasure * (dialogue.measure - 1)),
+                    color = color
+            });
+                secondsIntoMeasure += (dialogue.beat * secondsPerBeat);
             }
         }
 
@@ -163,7 +167,13 @@ public class GameManager : MonoBehaviour {
         return new Stack<TimedNote>(timedNotes.OrderByDescending(t => t.time));
     }
 
-    public bool completedStage = false;
+    private IEnumerator DeactivateAfterSeconds(GameObject gameObject, float seconds)
+    {
+        yield return new WaitForSeconds(seconds);
+        gameObject.SetActive(false);
+    }
+
+    private Coroutine deactivateDialogueCoroutine;
     private void PlayingStage(Stage stage)
     {
         timer += Time.deltaTime;
@@ -174,7 +184,19 @@ public class GameManager : MonoBehaviour {
             if (sortedStageDialogue.Peek().time <= timer)
             {
                 TimedDialogue dialogue = sortedStageDialogue.Pop();
-                dialoguePanel.GetComponentInChildren<Text>().text = dialogue.text;
+
+                Text textObject = dialoguePanel.GetComponentInChildren<Text>();
+                textObject.text = dialogue.text;
+                textObject.color = dialogue.color;
+
+                dialoguePanel.SetActive(true);
+
+                // Hide text after duration
+                if (deactivateDialogueCoroutine != null)
+                {
+                    StopCoroutine(deactivateDialogueCoroutine);
+                }
+                deactivateDialogueCoroutine = StartCoroutine(DeactivateAfterSeconds(dialoguePanel, dialogue.duration));
             }
         }
 
@@ -191,7 +213,9 @@ public class GameManager : MonoBehaviour {
                 }
             }
         }
-        else if(!completedStage)
+
+        // TODO how do we want to end the stage? Need to add collision detection on notes, keep track and complete if all are hit
+        if (!sortedStageNotes.Any() && !sortedStageDialogue.Any())
         {
             state = GameState.InitStage;
         }
