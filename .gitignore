@@ -1,5 +1,6 @@
 # Blacklist everything in the top-most directory by default:
 /*
+*.DS_Store
 
 # Whitelist some files/folders:
 !.gitignore
