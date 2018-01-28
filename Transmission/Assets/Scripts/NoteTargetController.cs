@@ -15,7 +15,8 @@ public class NoteTargetController : MonoBehaviour {
     {
         if(hit)
         {
-            gameObject.transform.localScale /= 2;
+            gameObject.GetComponentInChildren<ParticleSystem>().Stop();
+            gameObject.transform.localScale = Vector3.zero;
         }
     }
 }
