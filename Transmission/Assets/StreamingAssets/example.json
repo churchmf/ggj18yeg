@@ -1,6 +1,6 @@
 {
-  "beatsPerMinute": 80,
-  "beatsPerMeasure": 5,
+  "beatsPerMinute": 120,
+  "beatsPerMeasure": 4,
   "keys": [
     {
       "note": "8",
@@ -58,58 +58,28 @@
   "stages": [
     {
       "tracks": [
-        "loop1a"
+        "basic"
       ],
       "notes": [
         {
           "measure": 1,
-          "beat": 0.5,
-          "note": "5"
-        },
-        {
-          "measure": 1,
-          "beat": 0.5,
-          "note": "1"
-        },
-        {
-          "measure": 1,
-          "beat": 0.5,
-          "note": "2"
-        },
-        {
-          "measure": 1,
-          "beat": 0.5,
-          "note": "3b"
-        },
-        {
-          "measure": 1,
-          "beat": 0.5,
+          "beat": 1,
           "note": "4"
         },
         {
-          "measure": 1,
-          "beat": 0.5,
-          "note": "5"
-        },
-        {
-          "measure": 1,
-          "beat": 0.5,
-          "note": "1"
-        },
-        {
-          "measure": 1,
-          "beat": 0.5,
-          "note": "2"
-        },
-        {
-          "measure": 1,
-          "beat": 0.5,
+          "measure": 3,
+          "beat": 1,
           "note": "3b"
         },
         {
-          "measure": 1,
-          "beat": 0.5,
-          "note": "4"
+          "measure": 5,
+          "beat": 1,
+          "note": "1"
+        },
+        {
+          "measure": 7,
+          "beat": 1,
+          "note": "6b"
         }
       ]
     }
