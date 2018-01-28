@@ -1,4 +1,5 @@
-﻿using UnityEngine;
+﻿using System;
+using UnityEngine;
 
 public class PlayerController : MonoBehaviour {
 
@@ -15,5 +16,9 @@ public class PlayerController : MonoBehaviour {
 
         Vector2 movement = new Vector2(0, moveVertical);
         rb.AddForce(movement * speed);
+
+        rb.AddTorque(moveVertical / 3);
+        rb.AddTorque((110 - rb.rotation) / 200);
+        rb.angularVelocity /= 2;
     }
 }
