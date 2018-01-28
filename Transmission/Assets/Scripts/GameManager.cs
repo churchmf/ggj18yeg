@@ -1,4 +1,5 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
@@ -43,6 +44,12 @@ public class GameManager : MonoBehaviour {
 
     private GameObject playerGameObject;
 
+    private List<string> levelList = new List<string>(new string[] {
+        "owe.json",
+        "super.json"
+    });
+    private int levelIndex;
+
     public GameObject dialoguePanel;
     public List<AudioSource> audioSourceTracks;
     void Start ()
@@ -70,10 +77,11 @@ public class GameManager : MonoBehaviour {
             case GameState.MainMenu:
                 uiMenu.SetActive(true);
                 uiHud.SetActive(false);
+                levelIndex = 0;
                 break;
             case GameState.InitLevel:
                 CleanUpLevel();
-                LoadLevel(levelName.text);
+                LoadLevel(levelList[levelIndex]);
                 stageIndex = 0;
                 state = GameState.InitStage;
                 break;
@@ -107,9 +115,16 @@ public class GameManager : MonoBehaviour {
                 }
                 break;
             case GameState.PassLevel:
-                uiHud.SetActive(true);
-                uiMenu.SetActive(false);
-                StartCoroutine(BackToMenuAfterSeconds(5));
+                levelIndex++;
+                if (levelIndex < levelList.Count())
+                {
+                    state = GameState.InitLevel;
+                }
+                else
+                {
+                    state = GameState.MainMenu;
+                    uiHud.SetActive(true);
+                }
                 break;
         }
 	}
@@ -233,6 +248,12 @@ public class GameManager : MonoBehaviour {
         return new Stack<TimedNote>(timedNotes.OrderByDescending(t => t.time));
     }
 
+    private IEnumerator ActionAfterSeconds(Action action, float seconds)
+    {
+        yield return new WaitForSeconds(seconds);
+        action.Invoke();
+    }
+
     private IEnumerator BackToMenuAfterSeconds(float seconds)
     {
         yield return new WaitForSeconds(seconds);
@@ -250,8 +271,6 @@ public class GameManager : MonoBehaviour {
     private List<GameObject> spawnedNotes;
     private void PlayingStage(Stage stage)
     {
-        timeLabel.GetComponent<Text>().text = timer.ToString();
-
         if (sortedStageDialogue.Any() && sortedStageDialogue.Peek().time <= timer)
         {
             TimedDialogue dialogue = sortedStageDialogue.Pop();
@@ -306,18 +325,25 @@ public class GameManager : MonoBehaviour {
 
         noteSpawnPositions = new Dictionary<string, float>();
 
-        MusicSheet sheet = LevelLoader.Load(name);
-        for(int i = 0; i < sheet.keys.Length; ++i)
+        try
         {
-            Key key = sheet.keys[i];
-            var y = keyStartHeight - (keyDistanceApart * i);
-            var noteGameObject = Instantiate(noteTriggerPrefab, new Vector3(0, y), Quaternion.identity);
-            noteGameObject.GetComponent<NoteTriggerController>().clip = Resources.Load<AudioClip>(Path.Combine("Audio", key.file));
-            noteGameObject.GetComponent<NoteTriggerController>().note = key.note;
+            MusicSheet sheet = LevelLoader.Load(name);
+            for(int i = 0; i < sheet.keys.Length; ++i)
+            {
+                Key key = sheet.keys[i];
+                var y = keyStartHeight - (keyDistanceApart * i);
+                var noteGameObject = Instantiate(noteTriggerPrefab, new Vector3(0, y), Quaternion.identity);
+                noteGameObject.GetComponent<NoteTriggerController>().clip = Resources.Load<AudioClip>(Path.Combine("Audio", key.file));
+                noteGameObject.GetComponent<NoteTriggerController>().note = key.note;
 
-            noteSpawnPositions.Add(key.note, y);
+                noteSpawnPositions.Add(key.note, y);
+            }
+            loadedLevel = sheet;
+        } catch (Exception e)
+        {
+            Console.WriteLine(e);
+            state = GameState.MainMenu;
         }
 
-        loadedLevel = sheet;
     }
 }
