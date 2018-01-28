@@ -25,6 +25,7 @@ public class GameManager : MonoBehaviour {
 
     private MusicSheet loadedLevel;
     private Stack<TimedNote> sortedStageNotes;
+    private Stack<TimedDialogue> sortedStageDialogue;
     private Dictionary<string, float> noteSpawnPositions;
 
     private float timer;
@@ -37,7 +38,9 @@ public class GameManager : MonoBehaviour {
     public float noteTargetSpeed = -100;
     public float noteTargetXScale = 1;
 
-    public GameObject playerGameObject;
+    private GameObject playerGameObject;
+
+    public GameObject dialoguePanel;
 
     private AudioSource audioSource;
     void Start ()
@@ -97,6 +100,7 @@ public class GameManager : MonoBehaviour {
 
     private void InitStage(Stage stage, int tempo, int beatsPerMeasure)
     {
+        sortedStageDialogue = GetTimedDialogue(stage.dialogue, tempo, beatsPerMeasure);
         sortedStageNotes = GetTimedNotes(stage.notes, tempo, beatsPerMeasure);
         foreach (string track in stage.tracks)
         {
@@ -105,6 +109,32 @@ public class GameManager : MonoBehaviour {
             audioSource.loop = true;
             audioSource.Play();
         }
+    }
+
+    private Stack<TimedDialogue> GetTimedDialogue(Dialogue[] dialogue, int tempo, int beatsPerMeasure)
+    {
+        float secondsPerBeat = 60f / tempo;
+        float secondsPerMeasure = (beatsPerMeasure * secondsPerBeat);
+
+        var timedNotes = new List<TimedDialogue>();
+
+        var measureNotes = dialogue.GroupBy(n => n.measure).OrderByDescending(m => m.Key);
+        foreach (IGrouping<int, Dialogue> measure in measureNotes)
+        {
+            float secondsIntoMeasure = 0;
+            foreach (Dialogue note in measure)
+            {
+                timedNotes.Add(new TimedDialogue()
+                {
+                    text = note.text,
+                    beat = note.beat,
+                    time = secondsIntoMeasure + (secondsPerMeasure * (note.measure - 1))
+                });
+                secondsIntoMeasure += (note.beat * secondsPerBeat);
+            }
+        }
+
+        return new Stack<TimedDialogue>(timedNotes.OrderByDescending(t => t.time));
     }
 
     private Stack<TimedNote> GetTimedNotes(Note[] notes, int tempo, int beatsPerMeasure)
@@ -138,6 +168,15 @@ public class GameManager : MonoBehaviour {
     {
         timer += Time.deltaTime;
         timeLabel.GetComponent<Text>().text = timer.ToString();
+
+        if(sortedStageDialogue.Any())
+        {
+            if (sortedStageDialogue.Peek().time <= timer)
+            {
+                TimedDialogue dialogue = sortedStageDialogue.Pop();
+                dialoguePanel.GetComponentInChildren<Text>().text = dialogue.text;
+            }
+        }
 
         if (sortedStageNotes.Any())
         {
