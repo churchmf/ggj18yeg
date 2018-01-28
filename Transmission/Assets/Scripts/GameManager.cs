@@ -61,13 +61,13 @@ public class GameManager : MonoBehaviour {
         timer += Time.deltaTime;
         if (Input.GetKey(KeyCode.Escape))
         {
+            CleanUpLevel();
             state = GameState.MainMenu;
         }
 
         switch (state)
         {
             case GameState.MainMenu:
-                CleanUpLevel();
                 uiMenu.SetActive(true);
                 uiHud.SetActive(false);
                 break;
@@ -130,6 +130,7 @@ public class GameManager : MonoBehaviour {
                 Destroy(spawn);
             }
         }
+        spawnedNotes = null;
 
         if (playerGameObject != null)
         {
@@ -232,6 +233,7 @@ public class GameManager : MonoBehaviour {
     private IEnumerator BackToMenuAfterSeconds(float seconds)
     {
         yield return new WaitForSeconds(seconds);
+        CleanUpLevel();
         state = GameState.MainMenu;
     }
 
@@ -271,14 +273,14 @@ public class GameManager : MonoBehaviour {
             if(!string.IsNullOrEmpty(note.note) && noteSpawnPositions.Any())
             {
                 var noteTarget = Instantiate(noteTargetPrefab, new Vector3(noteTargetXStartOffset, noteSpawnPositions[note.note]), Quaternion.identity);
-                noteTarget.transform.localScale += new Vector3(noteTargetXScale * note.duration, 0);
+                noteTarget.GetComponent<SpriteRenderer>().size = new Vector2(noteTargetXScale * note.duration, 1);
                 noteTarget.GetComponent<Rigidbody2D>().AddForce(new Vector2(noteTargetSpeed, 0));
                 spawnedNotes.Add(noteTarget);
             }
         }
 
         // If all tracks are done playing, stage is over
-        if (audioSourceTracks.All(a => !a.isPlaying))
+        if (!sortedStageNotes.Any() && !sortedStageDialogue.Any() && audioSourceTracks.All(a => !a.isPlaying))
         {
             // Check if we won, otherwise restart
             if (spawnedNotes.All(s => s.GetComponent<NoteTargetController>().hit))
