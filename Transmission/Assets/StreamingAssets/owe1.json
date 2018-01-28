@@ -107,6 +107,19 @@
           "note": "2"
         }
       ]
+    },
+    {
+      "tracks": [
+        "owe1b"
+      ],
+      "dialogue": [
+        {
+          "measure": 2,
+          "beat": 8,
+          "text": "You get lost in it.",
+		      "color": "#ffb93f"
+        }
+      ]
     }
   ]
 }

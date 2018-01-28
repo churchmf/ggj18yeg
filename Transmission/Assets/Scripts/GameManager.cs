@@ -96,7 +96,7 @@ public class GameManager : MonoBehaviour {
                 break;
             case GameState.PassStage:
                 stageIndex++;
-                if(loadedLevel.stages.Length < stageIndex)
+                if(stageIndex < loadedLevel.stages.Length)
                 {
                     state = GameState.InitStage;
                 }
@@ -211,19 +211,22 @@ public class GameManager : MonoBehaviour {
 
         var timedNotes = new List<TimedNote>();
 
-        var measureNotes = notes.GroupBy(n => n.measure).OrderByDescending(m => m.Key);
-        foreach(IGrouping<int, Note> measure in measureNotes)
+        if(notes != null && notes.Any())
         {
-            float secondsIntoMeasure = 0;
-            foreach (Note note in measure)
+            var measureNotes = notes.GroupBy(n => n.measure).OrderByDescending(m => m.Key);
+            foreach(IGrouping<int, Note> measure in measureNotes)
             {
-                timedNotes.Add(new TimedNote()
+                float secondsIntoMeasure = 0;
+                foreach (Note note in measure)
                 {
-                    note = note.note,
-                    duration = note.beat * secondsPerBeat,
-                    time = secondsIntoMeasure + (secondsPerMeasure * (note.measure - 1))
-                });
-                secondsIntoMeasure += (note.beat * secondsPerBeat);
+                    timedNotes.Add(new TimedNote()
+                    {
+                        note = note.note,
+                        duration = note.beat * secondsPerBeat,
+                        time = secondsIntoMeasure + (secondsPerMeasure * (note.measure - 1))
+                    });
+                    secondsIntoMeasure += (note.beat * secondsPerBeat);
+                }
             }
         }
 
