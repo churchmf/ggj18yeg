@@ -1,0 +1,294 @@
+{
+  "beatsPerMinute": 120,
+  "beatsPerMeasure": 4,
+  "keys": [
+    {
+      "note": "8",
+      "file": "C4"
+    },
+    {
+      "note": "7",
+      "file": "B4"
+    },
+    {
+      "note": "7b",
+      "file": "A#4"
+    },
+    {
+      "note": "6",
+      "file": "A3"
+    },
+    {
+      "note": "6b",
+      "file": "G#3"
+    },
+    {
+      "note": "5",
+      "file": "G3"
+    },
+    {
+      "note": "5b",
+      "file": "F#3"
+    },
+    {
+      "note": "4",
+      "file": "F3"
+    },
+    {
+      "note": "3",
+      "file": "E3"
+    },
+    {
+      "note": "3b",
+      "file": "D#3"
+    },
+    {
+      "note": "2",
+      "file": "D3"
+    },
+    {
+      "note": "2b",
+      "file": "C#3"
+    },
+    {
+      "note": "1",
+      "file": "C3"
+    }
+  ],
+  "stages": [
+    {
+      "tracks": [
+        "super1"
+      ],
+      "notes": [
+        {
+          "measure": 1,
+          "beat": 3,
+          "note": ""
+        },
+        {
+          "measure": 1,
+          "beat": 0.25,
+          "note": "3"
+        },
+        {
+          "measure": 1,
+          "beat": 0.25,
+          "note": "4"
+        },
+        {
+          "measure": 1,
+          "beat": 0.25,
+          "note": "3"
+        },
+        {
+          "measure": 1,
+          "beat": 0.75,
+          "note": "2"
+        },
+        {
+          "measure": 2,
+          "beat": 0.5,
+          "note": "7"
+        },
+        {
+          "measure": 2,
+          "beat": 1,
+          "note": "5"
+        },
+        {
+          "measure": 2,
+          "beat": 1,
+          "note": "7"
+        },
+        {
+          "measure": 2,
+          "beat": 0.75,
+          "note": "3"
+        },
+        {
+          "measure": 3,
+          "beat": 1.25,
+          "note": "1"
+        },
+        {
+          "measure": 4,
+          "beat": 3,
+          "note": ""
+        },
+        {
+          "measure": 5,
+          "beat": 3,
+          "note": ""
+        },
+        {
+          "measure": 5,
+          "beat": 0.25,
+          "note": "3"
+        },
+        {
+          "measure": 5,
+          "beat": 0.25,
+          "note": "4"
+        },
+        {
+          "measure": 5,
+          "beat": 0.25,
+          "note": "3"
+        },
+        {
+          "measure": 5,
+          "beat": 0.75,
+          "note": "2"
+        },
+        {
+          "measure": 6,
+          "beat": 0.5,
+          "note": "7"
+        },
+        {
+          "measure": 6,
+          "beat": 1,
+          "note": "5"
+        },
+        {
+          "measure": 6,
+          "beat": 1,
+          "note": "7"
+        },
+        {
+          "measure": 6,
+          "beat": 0.75,
+          "note": "3"
+        },
+        {
+          "measure": 7,
+          "beat": 1.25,
+          "note": "1"
+        },
+        {
+          "measure": 8,
+          "beat": 3,
+          "note": ""
+        }
+      ]
+    },
+    {
+      "tracks": [
+        "super2"
+      ],
+      "notes": [
+        {
+          "measure": 1,
+          "beat": 3,
+          "note": ""
+        },
+        {
+          "measure": 1,
+          "beat": 0.25,
+          "note": "3"
+        },
+        {
+          "measure": 1,
+          "beat": 0.25,
+          "note": "4"
+        },
+        {
+          "measure": 1,
+          "beat": 0.25,
+          "note": "3"
+        },
+        {
+          "measure": 1,
+          "beat": 0.75,
+          "note": "2"
+        },
+        {
+          "measure": 2,
+          "beat": 0.5,
+          "note": "7"
+        },
+        {
+          "measure": 2,
+          "beat": 1,
+          "note": "5"
+        },
+        {
+          "measure": 2,
+          "beat": 1,
+          "note": "7"
+        },
+        {
+          "measure": 2,
+          "beat": 0.75,
+          "note": "3"
+        },
+        {
+          "measure": 3,
+          "beat": 1.25,
+          "note": "1"
+        },
+        {
+          "measure": 4,
+          "beat": 3,
+          "note": ""
+        },
+        {
+          "measure": 5,
+          "beat": 3,
+          "note": ""
+        },
+        {
+          "measure": 5,
+          "beat": 0.25,
+          "note": "3"
+        },
+        {
+          "measure": 5,
+          "beat": 0.25,
+          "note": "4"
+        },
+        {
+          "measure": 5,
+          "beat": 0.25,
+          "note": "3"
+        },
+        {
+          "measure": 5,
+          "beat": 0.75,
+          "note": "2"
+        },
+        {
+          "measure": 6,
+          "beat": 0.5,
+          "note": "7"
+        },
+        {
+          "measure": 6,
+          "beat": 1,
+          "note": "5"
+        },
+        {
+          "measure": 6,
+          "beat": 1,
+          "note": "7"
+        },
+        {
+          "measure": 6,
+          "beat": 0.75,
+          "note": "3"
+        },
+        {
+          "measure": 7,
+          "beat": 1.25,
+          "note": "1"
+        },
+        {
+          "measure": 8,
+          "beat": 3,
+          "note": ""
+        }
+      ]
+    }
+  ]
+}
