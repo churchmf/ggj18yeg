@@ -44,10 +44,10 @@ public class GameManager : MonoBehaviour {
     private GameObject playerGameObject;
 
     public GameObject dialoguePanel;
-    public List<AudioSource> audioSources;
+    public List<AudioSource> audioSourceTracks;
     void Start ()
     {
-        audioSources = new List<AudioSource>(GetComponents<AudioSource>());
+        audioSourceTracks = new List<AudioSource>(GetComponents<AudioSource>());
         state = GameState.MainMenu;
     }
 
@@ -55,17 +55,18 @@ public class GameManager : MonoBehaviour {
         timer += Time.deltaTime;
         if (Input.GetKey(KeyCode.Escape))
         {
-            CleanUpLevel();
             state = GameState.MainMenu;
         }
 
         switch (state)
         {
             case GameState.MainMenu:
+                CleanUpLevel();
                 uiMenu.SetActive(true);
                 uiHud.SetActive(false);
                 break;
             case GameState.InitLevel:
+                CleanUpLevel();
                 LoadLevel(levelName.text);
                 stageIndex = 0;
                 state = GameState.InitStage;
@@ -102,6 +103,7 @@ public class GameManager : MonoBehaviour {
             case GameState.PassLevel:
                 uiHud.SetActive(true);
                 uiMenu.SetActive(false);
+                StartCoroutine(BackToMenuAfterSeconds(5));
                 break;
         }
 	}
@@ -113,7 +115,15 @@ public class GameManager : MonoBehaviour {
 
     private void CleanUpLevel()
     {
-        audioSources.ForEach(a => a.Stop());
+        audioSourceTracks.ForEach(a => a.Stop());
+
+        if (spawnedNotes != null && spawnedNotes.Any())
+        {
+            foreach (var spawn in spawnedNotes)
+            {
+                Destroy(spawn);
+            }
+        }
 
         if (playerGameObject != null)
         {
@@ -132,22 +142,27 @@ public class GameManager : MonoBehaviour {
         sortedStageNotes = GetTimedNotes(stage.notes, tempo, beatsPerMeasure);
 
         // Stop all playing tracks
-        audioSources.ForEach(a => a.Stop());
+        audioSourceTracks.ForEach(a => a.Stop());
 
         // ensure we have an audio source for each track
-        while (audioSources.Count() < stage.tracks.Length)
+        while (GetComponents<AudioSource>().Length > stage.tracks.Length)
         {
-            audioSources.Add(gameObject.AddComponent<AudioSource>());
+            Destroy(audioSourceTracks.Last());
         }
+        while (GetComponents<AudioSource>().Length < stage.tracks.Length)
+        {
+            gameObject.AddComponent<AudioSource>();
+        }
+        audioSourceTracks = new List<AudioSource>(GetComponents<AudioSource>());
 
         // Start all new tracks
-        for(int i = 0; i < stage.tracks.Length; ++i)
+        for (int i = 0; i < stage.tracks.Length; ++i)
         {
             string path = Path.Combine("Audio", stage.tracks[i]);
             AudioClip audioClip = Resources.Load<AudioClip>(path);
 
-            audioSources[i].clip = audioClip;
-            audioSources[i].Play();
+            audioSourceTracks[i].clip = audioClip;
+            audioSourceTracks[i].Play();
         }
     }
 
@@ -208,6 +223,12 @@ public class GameManager : MonoBehaviour {
         return new Stack<TimedNote>(timedNotes.OrderByDescending(t => t.time));
     }
 
+    private IEnumerator BackToMenuAfterSeconds(float seconds)
+    {
+        yield return new WaitForSeconds(seconds);
+        state = GameState.MainMenu;
+    }
+
     private IEnumerator DeactivateAfterSeconds(GameObject gameObject, float seconds)
     {
         yield return new WaitForSeconds(seconds);
@@ -220,44 +241,38 @@ public class GameManager : MonoBehaviour {
     {
         timeLabel.GetComponent<Text>().text = timer.ToString();
 
-        if(sortedStageDialogue.Any())
+        if (sortedStageDialogue.Any() && sortedStageDialogue.Peek().time <= timer)
         {
-            if (sortedStageDialogue.Peek().time <= timer)
+            TimedDialogue dialogue = sortedStageDialogue.Pop();
+
+            Text textObject = dialoguePanel.GetComponentInChildren<Text>();
+            textObject.text = dialogue.text;
+            textObject.color = dialogue.color;
+
+            dialoguePanel.SetActive(true);
+
+            // Hide text after duration
+            if (deactivateDialogueCoroutine != null)
             {
-                TimedDialogue dialogue = sortedStageDialogue.Pop();
-
-                Text textObject = dialoguePanel.GetComponentInChildren<Text>();
-                textObject.text = dialogue.text;
-                textObject.color = dialogue.color;
-
-                dialoguePanel.SetActive(true);
-
-                // Hide text after duration
-                if (deactivateDialogueCoroutine != null)
-                {
-                    StopCoroutine(deactivateDialogueCoroutine);
-                }
-                deactivateDialogueCoroutine = StartCoroutine(DeactivateAfterSeconds(dialoguePanel, dialogue.duration));
+                StopCoroutine(deactivateDialogueCoroutine);
             }
+            deactivateDialogueCoroutine = StartCoroutine(DeactivateAfterSeconds(dialoguePanel, dialogue.duration));
         }
 
-        if (sortedStageNotes.Any())
+        if (sortedStageNotes.Any() && sortedStageNotes.Peek().time <= timer)
         {
-            if (sortedStageNotes.Peek().time <= timer)
+            TimedNote note = sortedStageNotes.Pop();
+            if(!string.IsNullOrEmpty(note.note) && noteSpawnPositions.Any())
             {
-                TimedNote note = sortedStageNotes.Pop();
-                if(!string.IsNullOrEmpty(note.note) && noteSpawnPositions.Any())
-                {
-                    var noteTarget = Instantiate(noteTargetPrefab, new Vector3(noteTargetXStartOffset, noteSpawnPositions[note.note]), Quaternion.identity);
-                    noteTarget.transform.localScale += new Vector3(noteTargetXScale * note.duration, 0);
-                    noteTarget.GetComponent<Rigidbody2D>().AddForce(new Vector2(noteTargetSpeed, 0));
-                    spawnedNotes.Add(noteTarget);
-                }
+                var noteTarget = Instantiate(noteTargetPrefab, new Vector3(noteTargetXStartOffset, noteSpawnPositions[note.note]), Quaternion.identity);
+                noteTarget.transform.localScale += new Vector3(noteTargetXScale * note.duration, 0);
+                noteTarget.GetComponent<Rigidbody2D>().AddForce(new Vector2(noteTargetSpeed, 0));
+                spawnedNotes.Add(noteTarget);
             }
         }
 
         // If all tracks are done playing, stage is over
-        if (audioSources.All(a => !a.isPlaying))
+        if (audioSourceTracks.All(a => !a.isPlaying))
         {
             // Check if we won, otherwise restart
             if (spawnedNotes.All(s => s.GetComponent<NoteTargetController>().hit))
